@@ -1,19 +1,13 @@
-d3.chart = {} unless d3.chart?
-console.log d3.chart
-console.log d3
-
 class d3.chart.Candlestick extends d3.chart.BaseChart
     _draw: (element, data, i) ->
 
-        console.log this
-
         x_scale = d3.time.scale()
-            .domain d3.extent data, (d) -> d.time
-            .range [0, width]
+            .domain d3.extent data, (d) -> new Date(d.time)
+            .range [0, @width()]
 
         y_scale = d3.scale.linear()
             .domain d3.extent data, (d) -> d.closeMid
-            .range [height, 0]
+            .range [@height(), 0]
 
         # select svg if it exists
         svg = d3.select element
@@ -30,11 +24,11 @@ class d3.chart.Candlestick extends d3.chart.BaseChart
 
         # update size
         svg
-            .width @width + @margin.left + @margin.right
-            .height @height + @margin.top + @margin.bottom
+            .attr "width", @width() + @margin().left + @margin().right
+            .attr "height", @height() + @margin().top + @margin().bottom
 
         g = svg.select "g"
-            .attr "transform", "translate(#{@margin.left}, #{@margin.top})"
+            .attr "transform", "translate(#{@margin().left}, #{@margin().top})"
 
         boxes = g.select ".candlesticks"
             .selectAll "rect"
@@ -44,11 +38,11 @@ class d3.chart.Candlestick extends d3.chart.BaseChart
             .enter()
             .append "rect"
             .classed "bar", true
-            .attr "x", (d) -> x_scale d.x
+            .attr "x", (d) ->
+                date = new Date(d.time)
+                x_scale date
             .attr "y", (d) -> y_scale d3.min [d.openMid, d.closeMid]
             .attr "width", 2
-            .attr "height", -> y_scale Math.abs(d.openMid - d.closeMid)
+            .attr "height", (d) -> y_scale Math.abs(d.openMid - d.closeMid)
 
         boxes.exit().remove()
-
-console.log "inherit me"
