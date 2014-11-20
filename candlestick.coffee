@@ -81,9 +81,16 @@ class d3.chart.Candlestick extends d3.chart.BaseChart
             .classed "candlestick-rect", true
             .classed "candlestick-up", (d) -> open_value(d) < close_value(d)
             .attr "x", (d) -> x_scale time_value d 
-            .attr "y", (d) -> y_scale d3.max [open_value d , close_value d]
+            .attr "y", (d) -> y_scale d3.max [open_value(d), close_value(d)]
             .attr "width", width / data.length
             .attr "height", (d) ->
                 Math.abs(y_scale(open_value(d)) - y_scale(close_value(d)))
+            .attr "title", (d) ->
+                """
+                low: #{low_value(d)}
+                high: #{high_value(d)}
+                open: #{open_value(d)}
+                close: #{close_value(d)}
+                """
 
         boxes.exit().remove()
