@@ -23,16 +23,9 @@ class d3.chart.Candlestick extends d3.chart.BaseChart
         open_value = @open_value()
         close_value = @close_value()
 
-        x_scale
-            .domain d3.extent data, time_value
-            .range [0, width]
-
-        y_scale
-            .domain [
-                d3.min data, low_value
-                d3.max data, high_value
-            ]
-            .range [height, 0]
+        # scales fill up width and height
+        x_scale.range [0, width]
+        y_scale.range [height, 0]
 
         # select svg if it exists
         svg = d3.select element
