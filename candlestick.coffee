@@ -56,13 +56,17 @@ class d3.chart.Candlestick extends d3.chart.BaseChart
             .enter()
             .append "line"
             .classed "stem", true
+
+        stems
             .classed "stem-up", (d) -> open_value(d) < close_value(d)
             .attr "x1", (d) -> x_scale(time_value(d)) + 0.5 * width / data.length
             .attr "x2", (d) -> x_scale(time_value(d)) + 0.5 * width / data.length
             .attr "y1", (d) -> y_scale high_value d  
             .attr "y2", (d) -> y_scale low_value d  
 
-        stems.exit().remove()
+        stems
+            .exit()
+            .remove()
 
         boxes = g.select ".candlesticks"
             .selectAll "rect"
@@ -72,6 +76,8 @@ class d3.chart.Candlestick extends d3.chart.BaseChart
             .enter()
             .append "rect"
             .classed "candlestick-rect", true
+
+        boxes
             .classed "candlestick-up", (d) -> open_value(d) < close_value(d)
             .attr "x", (d) -> x_scale time_value d 
             .attr "y", (d) -> y_scale d3.max [open_value(d), close_value(d)]
@@ -86,4 +92,6 @@ class d3.chart.Candlestick extends d3.chart.BaseChart
                 close: #{close_value(d)}
                 """
 
-        boxes.exit().remove()
+        boxes
+            .exit()
+            .remove()
